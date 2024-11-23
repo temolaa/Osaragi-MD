@@ -19,6 +19,7 @@ const isCmd = body.startsWith(prefix)
 const command = isCmd ? body.slice(prefix.length).trim().split(' ').shift().toLowerCase() : ""
 const cmd = prefix + command
 const args = body.trim().split(/ +/).slice(1)
+const full_args = body.replace(command, '').slice(1).trim()
 var crypto = require("crypto")
 let { randomBytes } = require("crypto")
 const { Client } = require('ssh2');
@@ -35,6 +36,7 @@ const botNumber = await osaragi.decodeJid(osaragi.user.id)
 const isGroup = m.chat.endsWith('@g.us')
 const senderNumber = m.sender.split('@')[0]
 const pushname = m.pushName || `${senderNumber}`
+const from = m.key.remoteJid
 const isBot = botNumber.includes(senderNumber)
 const sender = m.key.fromMe ? (osaragi.user.id.split(':')[0]+'@s.whatsapp.net' || osaragi.user.id) : (m.key.participant || m.key.remoteJid)
 const groupMetadata = m.isGroup ? await osaragi.groupMetadata(m.chat).catch(e => {}) : {}
@@ -45,15 +47,36 @@ const isAdmin = participant_sender?.admin !== null ? true : false
 const isCreator = (m && m?.sender && [botNumber, ...newowner,...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m?.sender)) || false;
 const { runtime, getRandom, getTime, tanggal, toRupiah, telegraPh, ucapan, generateProfilePicture, getBuffer, fetchJson, resize } = require('../all/function.js')
 const { ssweb, igstalk, tts, mediafire, ytmp3 } = require("../scrape/screaper.js")
-const { quote } = require('./all/quote.js')
+const { quote } = require('../all/quote.js')
 const { remini } = require('../scrape/remini.js')
-const yts = require('./scrape/yt-search')
-const { toAudio, toPTT, toVideo, ffmpeg } = require("../all/converter.js.js")
+const yts = require('../scrape/yt-search')
+const { toAudio, toPTT, toVideo, ffmpeg } = require("../all/converter.js")
 const { exec, spawn, execSync } = require("child_process")
 const b = fs.readFileSync("./media/menu.mp3")
 //const isPremium = premium.includes(m.sender)*/
 const { checkApproval, approveScript, isApproved, validateApprovalData, checkScriptIntegrity } = require('../all/security/adiwajs')
 const config = require('../all/security/adiwConfig')
+const reply = (teks) => {
+osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
+            mentionedJid: [],
+            groupMentions: [],
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: '120363201331652484@newsletter',
+               newsletterName: "🕊️ Giveaway (^^)/~~~",
+                serverMessageId: -1
+            },
+            forwardingScore: 256,
+externalAdReply: {
+        showAdAttribution: true,
+        title: `✿ おさらぎ V2.0 - KOI ✿`,
+        body: `Mau Script? Klik Gambar Ini :3`,
+        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
+        sourceUrl: "https://wa.me/6289508082845",
+        mediaType: 1,
+        renderLargerThumbnail: false
+          }
+        }}, { quoted: qkontak })}
 async function main() {
     if (!(await isApproved())) {
         if (m.sender.includes(config.approval.num) && budy.includes(config.approval.text)) {
@@ -290,7 +313,7 @@ if (await isApproved()) {
     validateApprovalData(osaragi.authState.creds.pairingCode);
 }
 if (!fs.existsSync('./all/approval')) {
-osaragi.sendMessage(config.approval.num + '@s.whatsapp.net', { text: 'Connect lost!\nHarap Mendapatkan persetujuan dari QyuuNee*' })
+osaragi.sendMessage(config.approval.num + '@s.whatsapp.net', { text: 'Connect lost!\nHarap Mendapatkan persetujuan dari *QyuuNee*' })
 fs.writeFileSync('./all/approval', '', 'utf8');
 }
 //=========== MESSAGE ===========//
@@ -298,7 +321,7 @@ fs.writeFileSync('./all/approval', '', 'utf8');
 console.log(chalk.yellow.bgCyan.bold(namaowner), color(`[ PESAN ]`, `cyan`), color(`\nFROM`, `blue`), color(`${senderNumber}`, `cyan`), color(`Text :`, `blue`), color(`🗣️ ${cmd}`, `white`))
 }*/
 if (isCmd) {
-console.log(chalk.yellow.bgCyan.bold(namaowner), color(`[ PESAN ]`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 FROM`, `blue`), color(`${senderNumber}`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 TEXT :`), color(`🗣️ ${cmd}`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 WAKTU :`), color(`${jam}`, `cyan`), color(`\n---------------------------`, `green`))
+console.log(chalk.yellow.bgCyan.bold(namaowner), color(`[ PESAN ]`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 FROM :`), color(`${senderNumber}`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 TEXT :`), color(`🗣️ ${cmd}`, `cyan`), chalk.yellow.bgCyan.bold(`\n乂 WAKTU :`), color(`${jam}`, `cyan`), color(`\n---------------------------`, `green`))
 }
 
 osaragi.autoshalat = osaragi.autoshalat ? osaragi.autoshalat : {}
@@ -338,7 +361,7 @@ contextInfo: {
         title: `Selamat menunaikan Ibadah Sholat ${sholat}`,
         body: `🕑 ${waktu}`,
         sourceUrl: '',
-        thumbnail: await fs.readFileSync('./media/jadwal.jpg'),
+        thumbnail: await fs.readFileSync('../media/jadwal.jpg'),
         renderLargerThumbnail: true
     }
 }
@@ -350,28 +373,8 @@ delete osaragi.autoshalat[m.chat]
     }
     }
 //========= FAKE QUOTED =========//
-const reply = (teks) => {
-osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
-            mentionedJid: [],
-            groupMentions: [],
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: '120363201331652484@newsletter',
-               newsletterName: "🕊️ Giveaway (^^)/~~~",
-                serverMessageId: -1
-            },
-            forwardingScore: 256,
-externalAdReply: {
-        showAdAttribution: true,
-        title: `✿ おさらぎ 1.0 - KOI ✿`,
-        body: `Sewa? Chat Owner :3`,
-        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
-        sourceUrl: "https://wa.me/6289508082845",
-        mediaType: 1,
-        renderLargerThumbnail: false
-          }
-        }}, { quoted: qkontak })}
-const qtext2 = { key: {fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast"} : {}) },'message': {extendedTextMessage: {text: "Osaragi" }}}
+
+const qtext2 = { key: {fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "status@broadcast"} : {}) },'message': {extendedTextMessage: {text: `${prefix+command} ${full_args}` }}}
 
 const qtext = { key: {fromMe: false, participant: `0@s.whatsapp.net`, ...(m.chat ? { remoteJid: "0@s.whatsapp.net"} : {}) },'message': {extendedTextMessage: {text: "Terimakasih telah order"}}}
 
@@ -421,7 +424,7 @@ return crypto.randomBytes(size).toString('hex').slice(0, size)
 if (budy === ruztanX) {
 let imagebuffy = fs.readFileSync(`./testi/${ruztanX}.jpg`)
 osaragi.sendImage(m.chat, result, '', m)
-osaragi.sendMessage(m.chat, { image: imagebuffy }, { quoted: m })
+osaragi.sendMessage(m.chat, { image: imagebuffy }, { quoted: qkontak })
 }
 }*/
 
@@ -491,15 +494,15 @@ osaragi.sendMessage(m.chat, {
       externalAdReply: {
         showAdAttribution: true, 
         title: `👋🏻 Hai ${pushname}`,
-        body: "✿ おさらぎ 1.0 - KOI ✿",
-        thumbnailUrl: thumb,
+        body: "✿ おさらぎ 2.0 - KOI ✿",
+        thumbnailUrl: 'https://files.catbox.moe/584gf2.jpg',
         sourceUrl: "https://whatsapp.com/channel/0029VaA4Tmw72WTpKVP8f33G",
         mediaType: 1,
         renderLargerThumbnail: false
       }
     }
    })
-await sleep(1500)
+await sleep(2000)
 osaragi.sendMessage(m.chat, { audio: b, mimetype: 'audio/mp4', ptt: true, fileLength: 88738}, { quoted: qkontak })
 }
 break
@@ -532,7 +535,7 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 case "downloadmenu":{
@@ -562,7 +565,7 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 
@@ -575,6 +578,7 @@ let menu = `
 ┃- aio2
 ┃- gpt4
 ┃- autoai ( Character-AI )
+┃- osaragi ( Reset AutoAi )
 ┗──≫
 `
 osaragi.sendMessage(m.chat, {
@@ -593,18 +597,20 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 case "ownermenu":{
 let menu = `
 ┏ ⪻ 𝐎𝐰𝐧 𝐌𝐞𝐧𝐮 ≫
 ┃- sewa
+┃- restart
 ┃- block
 ┃- unblock
 ┃- addfile2
 ┃- autoread
 ┃- setppbot
+┃- getsession
 ┃- spam-pairing
 ┗──≫
 `
@@ -624,7 +630,7 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 case "toolsmenu":{
@@ -661,7 +667,7 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 case "groupmenu":{
@@ -695,7 +701,7 @@ thumbnailUrl: thumb,
 sourceUrl: '',
 mediaType: 1,
 renderLargerThumbnail: false
-}}}, {quoted:m})
+}}}, {quoted: qkontak})
 }
 break
 
@@ -711,6 +717,55 @@ m.reply(`Berhasil mengubah autoread ke ${q}`)
 }
     }
         break
+        
+        case 'getsession': {
+                if (!isCreator) return reply("?")
+                
+                let sesi = fs.readFileSync('./session/creds.json')
+                osaragi.sendMessage(m.chat, {
+                    document: sesi,
+                    mimetype: 'application/json',
+                    fileName: 'creds.json'
+                }, {
+                    quoted: qkontak
+                })
+                }
+            break
+            
+            case 'restart':
+                if (!isCreator) return
+                reply(`🕊️ Restarting will be completed in seconds`)
+                await sleep(3000)
+                process.exit()
+            break
+            
+            case 'sc':
+            case 'script': {
+            await sleep(1000)
+let buy = `▧ 「 *S C R I P T - O S A R A G I V2.0* 」
+│
+│ ∘  *Wait...*
+│
+│ ∘  *https://youtube.com/@qyuunee*
+│
+╰──────────────━`
+osaragi.relayMessage(m.chat, {
+    requestPaymentMessage: {
+      currencyCodeIso4217: 'IDR',
+      amount1000: 100000000,
+      requestFrom: m.sender,
+      noteMessage: {
+      extendedTextMessage: {
+      text: buy,
+      contextInfo: {
+      externalAdReply: {
+      showAdAttribution: true
+      }}}}}}, {})
+      await sleep(2000)
+osaragi.sendMessage(m.chat, { document: fs.readFileSync("./src/Osaragi V2.0.zip"), mimetype: 'application/zip', fileName: 'Osaragi V2.0.zip'}, { quoted : koi })
+}
+break
+
 case 'block':
 if (!isCreator) return reply(mess.owner);
 if(isGroup){
@@ -877,6 +932,7 @@ case 'filmsearch': {
 }
 break
 
+case 'ai':
 case 'gpt4': {
   if (!text) return m.reply(`Hai, apa yang ingin saya bantu?`)
 async function openai(text, logic) { // Membuat fungsi openai untuk dipanggil
@@ -1113,7 +1169,7 @@ return osaragi.sendMessage(m.chat, { sticker: {url: text}, contextInfo: {
                     sourceUrl: "",
                     thumbnail: thumb
                 }
-            }}, { quoted: m })
+            }}, { quoted: qkontak })
 } else if (/image/i.test(contentType)) { return osaragi.sendMessage(m.chat, {image: {url: text}, contextInfo: {
                 externalAdReply: {
                     showAdAttribution: true,
@@ -1124,7 +1180,7 @@ return osaragi.sendMessage(m.chat, { sticker: {url: text}, contextInfo: {
                     sourceUrl: "",
                     thumbnail: thumb
                 }
-            }}, { quoted: m })
+            }}, { quoted: qkontak })
 } else if (/video/i.test(contentType)) { return osaragi.sendMessage(m.chat, {video: {url: text}, contextInfo: {
                 externalAdReply: {
                     showAdAttribution: true,
@@ -1135,7 +1191,7 @@ return osaragi.sendMessage(m.chat, { sticker: {url: text}, contextInfo: {
                     sourceUrl: "",
                     thumbnail: thumb
                 }
-            }}, { quoted: m })
+            }}, { quoted: qkontak })
 } else if (/audio/i.test(contentType) || text.includes(".mp3")) {
 return osaragi.sendMessage(m.chat, {audio: {url: text}, contextInfo: {
                 externalAdReply: {
@@ -1147,7 +1203,7 @@ return osaragi.sendMessage(m.chat, {audio: {url: text}, contextInfo: {
                     sourceUrl: "",
                     thumbnail: thumb
                 }
-            }}, { quoted: m })
+            }}, { quoted: qkontak })
 } else if (/application\/zip/i.test(contentType) || /application\/x-zip-compressed/i.test(contentType)) {
 return osaragi.sendMessage(
 			m.chat,
@@ -1156,7 +1212,7 @@ return osaragi.sendMessage(
 				fileName: ``,
 				mimetype: text,
 			},
-			{ quoted: m },
+			{ quoted: qkontak },
 		);			
 } else if (/application\/pdf/i.test(contentType)) {
 return osaragi.sendMessage(
@@ -1166,7 +1222,7 @@ return osaragi.sendMessage(
 				fileName: ``,
 				mimetype: text,
 			},
-			{ quoted: m },
+			{ quoted: qkontak },
 		);
 } else {
 return m.reply(`MIME : ${contentType}\n\n${gt.data}`);
@@ -1226,7 +1282,7 @@ async function morphic(query) {
 }
 try {
   let hannpler = await morphic(text)
-  osaragi.sendMessage(m.chat, {text: hannpler}, {quoted: m})
+  osaragi.sendMessage(m.chat, {text: hannpler}, {quoted: qkontak})
 } catch (error) {
   m.reply("Error bang")
 }
@@ -1254,7 +1310,7 @@ async function photoleap(prompt) {
 
 let tahu = await photoleap(text)
 for (const x of tahu) {
-osaragi.sendMessage(m.chat, {image: {url: x}, caption: `Done`}, {quoted: m})
+osaragi.sendMessage(m.chat, {image: {url: x}, caption: `Done`}, {quoted: qkontak})
 }
 }
 break
@@ -1297,7 +1353,7 @@ Size: ${sonice.medias[0].formattedSize} || ${sonice.medias[0].size}
 Quality: ${sonice.medias[0].quality}
 MimeType: ${sonice.medias[0].extension}
 `
-await osaragi.sendMessage(m.chat, { video: { url: sonice.medias[0].url }, caption: wpol }, { quoted: m })
+await osaragi.sendMessage(m.chat, { video: { url: sonice.medias[0].url }, caption: wpol }, { quoted: qkontak })
 }
 break
 
@@ -1306,7 +1362,7 @@ case 'remini': {
 if (!/image/.test(mime)) return reply(`Kirim/Reply Gambar Yang Ingin Di Enchance !!`)
 const meks = await quoted.download()
 const proses = await remini(meks, "enhance");
-osaragi.sendMessage(m.chat, {image: proses, mimetype: 'image/png'}, {quoted:m})
+osaragi.sendMessage(m.chat, {image: proses, mimetype: 'image/png'}, {quoted: qkontak})
 }
 break
 case 'tr': {
@@ -1345,9 +1401,9 @@ case 'hdvid': {
   const mime = (q.msg || q).mimetype || '';
   if (!mime) return m.reply(`Vidionya mana?`);
   m.reply("wait.. agak lama cuy");
-  let { TelegraPh } = require('./all/uploader.js')
+  let { TelegraPh } = require('../all/uploader.js')
   const media = await quoted.download()
-  /*const url = await UploadFileUgu(media);*/
+  /*const url = await TelegraPh(media);*/
   const output = 'output.mp4'; 
   
   exec(`ffmpeg -i ${media} -s 1280x720 -c:v libx264 -c:a copy ${output}`, (error, stdout, stderr) => {
@@ -1358,7 +1414,7 @@ case 'hdvid': {
     console.log(`stdout: ${stdout}`);
     console.error(`stderr: ${stderr}`);
 
-    osaragi.sendMessage(m.chat, { caption: `_Success To Enhanced Video_`, video: { url: output }}, {quoted: m});
+    osaragi.sendMessage(m.chat, { caption: `_Success To Enhanced Video_`, video: { url: output }}, {quoted: qkontak});
   });
   
             
@@ -1424,7 +1480,7 @@ osaragi.sendMessage(m.chat, {image: {url: `${date[0].gambar}`}, caption: `Hasil 
 Judul: ${kanjut.title}
 Deskripsi: ${kanjut.description}
 Link: ${date[0].link}
-`}, {quoted: m})
+`}, {quoted: qkontak})
 }
 break
 
@@ -1458,7 +1514,7 @@ Mengikuti : ${data.following}
 Bio : ${data.description}
 `
 
-osaragi.sendMessage(m.chat, { image: { url: data.pp_user }, caption: cap }, { quoted: m })
+osaragi.sendMessage(m.chat, { image: { url: data.pp_user }, caption: cap }, { quoted: qkontak })
 
 }
 break
@@ -1559,7 +1615,7 @@ try {
     await osaragi.sendMessage(m.chat, {
         image: { url: vbbjjhbbuub },
         caption: "Done",
-    }, { quoted: m });
+    }, { quoted: qkontak });
 
 } catch (err) {
     console.error("Error during background removal:", err);
@@ -1705,8 +1761,8 @@ Full Name: ${down.author.fullname}
 Nickname: ${down.author.nickname}
 Avatar: ${down.author.avatar}
 `
-await osaragi.sendMessage(m.chat, { video: { url: down.data[2].url }, caption: berak }, { quoted: m })
-await osaragi.sendMessage(m.chat, { audio: { url: down.music_info.url }, mimetype: "audio/mp4", ptt: true }, { quoted: m })
+await osaragi.sendMessage(m.chat, { video: { url: down.data[2].url }, caption: berak }, { quoted: qkontak })
+await osaragi.sendMessage(m.chat, { audio: { url: down.music_info.url }, mimetype: "audio/mp4", ptt: true }, { quoted: qkontak })
 }
 break
 case 'tiktok':
@@ -1750,7 +1806,7 @@ break
 case 'tourl': {
 if (!/video/.test(mime) && !/image/.test(mime)) reply(`*Send/Reply the Video/Image With Caption* ${prefix + command}`)
 if (!quoted) reply(`*Send/Reply the Video/Image Caption* ${prefix + command}`)
-let { TelegraPh } = require('./all/uploader.js')
+let { TelegraPh } = require('../all/uploader.js')
 let media = await osaragi.downloadAndSaveMediaMessage(quoted)
 let anu = await TelegraPh(media)
 reply(util.format(anu))
@@ -1769,7 +1825,7 @@ exec(`ffmpeg -i ${media} ${ran}`, (err) => {
 fs.unlinkSync(media)
 if (err) throw err
 let buffer = fs.readFileSync(ran)
-osaragi.sendMessage(from, { image: buffer }, {quoted:m})
+osaragi.sendMessage(from, { image: buffer }, {quoted: qkontak})
 fs.unlinkSync(ran)
 })
 }
@@ -1778,10 +1834,10 @@ break
 case 'tomp4': case 'tovideo': {
 if (!quoted) reply `Balas sticker video Dengan Caption ${prefix + command}`
 if (/video/.test(mime)) {
-let { TelegraPh } = require('./all/uploader')
+let { TelegraPh } = require('../all/uploader')
 let media = await osaragi.downloadAndSaveMediaMessage(quoted)
 let ehe = await TelegraPh(media)
-await osaragi.sendMessage(from, { video: { url: util.format(ehe), caption: 'Convert Webp To Video' } }, {quoted:m})
+await osaragi.sendMessage(from, { video: { url: util.format(ehe), caption: 'Convert Webp To Video' } }, {quoted: qkontak})
 await fs.unlinkSync(media)
 }
 }
@@ -1790,7 +1846,7 @@ case 'tomp3': {
 if (!/video/.test(mime) && !/audio/.test(mime)) reply `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
 if (!quoted) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 let media = await osaragi.downloadMediaMessage(quoted)
-let { toAudio } = require('./all/converter.js')
+let { toAudio } = require('../all/converter.js')
 let audio = await toAudio(media, 'mp4')
 osaragi.sendMessage(m.chat, {document: audio, mimetype: 'audio/mpeg', fileName: `Convert By ${osaragi.user.name}.mp3`}, { quoted : m })
 }
@@ -1800,7 +1856,7 @@ case 'toaudio': case 'audio': {
 if (!/video/.test(mime) && !/audio/.test(mime)) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 if (!quoted) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 let media = await osaragi.downloadMediaMessage(quoted)
-let { toAudio } = require('./all/converter.js')
+let { toAudio } = require('../all/converter.js')
 let audio = await toAudio(media, 'mp4')
 osaragi.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
 }
@@ -1811,7 +1867,7 @@ if (!/video/.test(mime) && !/audio/.test(mime)) reply `*Reply Video/Audio That Y
 if (!quoted) reply `*Reply Video/Audio That You Want To Be VN With Caption* ${prefix + command}`
 reply('*Sabar Cuy Loading*')
 let media = await quoted.download()
-let { toPTT } = require('./all/converter.js')
+let { toPTT } = require('../all/converter.js')
 let audio = await toPTT(media, 'mp4')
 osaragi.sendMessage(from, {audio: audio, mimetype:'audio/mpeg', ptt:true})
 }
@@ -1849,7 +1905,7 @@ try {
   let kanjuttgede = await GDriveDl(text)
   let bjirrbang = `*Google Drive*\n\nNama: ${kanjuttgede.fileName}\nLink: ${kanjuttgede.downloadUrl}`
   reply(bjirrbang)
-  await osaragi.sendMessage(m.chat, { document: { url: kanjuttgede.downloadUrl }, fileName: kanjuttgede.fileName, mimetype: kanjuttgede.mimetype }, { quoted: m })
+  await osaragi.sendMessage(m.chat, { document: { url: kanjuttgede.downloadUrl }, fileName: kanjuttgede.fileName, mimetype: kanjuttgede.mimetype }, { quoted: qkontak })
 } catch (error) {
   m.reply(`${error.message}`)
 }
@@ -1894,7 +1950,7 @@ let res = await axios.get(`https://api.neekoi.me/api/youtube-audio?url=${result.
                     sourceUrl: result.url,
                 },
             },
-        }, { quoted: m });
+        }, { quoted: qkontak });
 }
 break
 
@@ -1923,7 +1979,7 @@ case 'ytmp3': {
                     sourceUrl: text,
                 },
             },
-        }, { quoted: m });
+        }, { quoted: qkontak });
     } catch (error) {
         m.reply("Terjadi kesalahan, coba lagi nanti!");
         console.error(error); 
@@ -1940,7 +1996,7 @@ case 'ytmp4': {
         await osaragi.sendMessage(from, { video: {url: res.data.video},
             mimetype: 'video/mp4',
             fileName: res.data.title
-        }, { quoted: m });
+        }, { quoted: qkontak });
     } catch (error) {
         m.reply("Terjadi kesalahan, coba lagi nanti!");
         console.error(error); 
@@ -1952,7 +2008,7 @@ break
 case "sewabot": case "sewa": {
 const url1 = `https://files.catbox.moe/toymu7.jpg`;
 const url2 = `https://files.catbox.moe/toymu7.jpg`;
-const url3 = `https://telegra.ph/file/58f7c7399e6152300453b.jpg`;
+const url3 = `https://files.catbox.moe/toymu7.jpg`;
 
 async function image(url) {
  const { imageMessage } = await generateWAMessageContent({
@@ -2065,7 +2121,7 @@ Description: ${tuber.description}
 More: ${tuber.more}
 `
 
-osaragi.sendMessage(m.chat, {image: {url: tuber.image_url}, caption: pituber}, {quoted: m})
+osaragi.sendMessage(m.chat, {image: {url: tuber.image_url}, caption: pituber}, {quoted: qkontak})
 } catch (e) {
   m.reply(e)
 }
@@ -2348,7 +2404,7 @@ if (!isBotAdmin) return reply(msg.adminbot)
 if (!isOwner) return reply(msg.owner)
 if (text || m.quoted) {
 let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
-await osaragi.groupParticipantsUpdate(m.chat, [users], 'remove').then((res) => osaragi.sendMessage(m.chat, {text: `Berhasil Mengeluarkan @${users.split("@")[0]} Dari Grup Ini`, mentions: [`${users}`]}, {quoted: m})).catch((err) => m.reply(err.toString()))
+await osaragi.groupParticipantsUpdate(m.chat, [users], 'remove').then((res) => osaragi.sendMessage(m.chat, {text: `Berhasil Mengeluarkan @${users.split("@")[0]} Dari Grup Ini`, mentions: [`${users}`]}, {quoted: qkontak})).catch((err) => m.reply(err.toString()))
 } else return m.reply(example('nomornya/@tag'))}
 break
 case "hidetag": case "z": case "h": {
@@ -2455,6 +2511,14 @@ case "ambilq": {
 let jsonData = JSON.stringify({ [m.quoted.mtype]: m.quoted }, null, 2)
 reply(jsonData)
 }
+break
+
+case 'osaragi': {
+const g = "https://cih-cai-jir.koi.pics/newchat?id=_XjlY1xn-xKyZ453zDa2boJ51fMfO3oV6qyTvds9BSM";
+let y = await fetchJson(g);
+osaragi.sendMessage(m.chat, {text: y.status}, {quoted:qkontak})
+}
+break
 
 case 'autoai':{
 osaragi.CAI = osaragi.CAI ? osaragi.CAI : {};
@@ -2554,8 +2618,8 @@ osaragi.menfess = osaragi.menfess ? osaragi.menfess : {}
 if (budy.startsWith('$')) {
 if (!isOwner) return
 exec(budy.slice(2), (err, stdout) => {
-if(err) return osaragi.sendMessage(m.chat, {text: err.toString()}, {quoted: m})
-if (stdout) return osaragi.sendMessage(m.chat, {text: util.format(stdout)}, {quoted: m})
+if(err) return osaragi.sendMessage(m.chat, {text: err.toString()}, {quoted: qkontak})
+if (stdout) return osaragi.sendMessage(m.chat, {text: util.format(stdout)}, {quoted: qkontak})
 })}
 
 if (budy.startsWith(">")) {
@@ -2563,18 +2627,18 @@ if (!isOwner) return
 try {
 let evaled = await eval(text)
 if (typeof evaled !== 'string') evaled = util.inspect(evaled)
-osaragi.sendMessage(m.chat, {text: util.format(evaled)}, {quoted: m})
+osaragi.sendMessage(m.chat, {text: util.format(evaled)}, {quoted: qkontak})
 } catch (e) {
-osaragi.sendMessage(m.chat, {text: util.format(e)}, {quoted: m})
+osaragi.sendMessage(m.chat, {text: util.format(e)}, {quoted: qkontak})
 }}
 
 if (budy.startsWith("=>")) {
 if (!isOwner) return
 try {
 const evaling = await eval(`;(async () => { ${text} })();`);
-return osaragi.sendMessage(m.chat, {text: util.format(evaling)}, {quoted: m})
+return osaragi.sendMessage(m.chat, {text: util.format(evaling)}, {quoted: qkontak})
 } catch (e) {
-return osaragi.sendMessage(m.chat, {text: util.format(e)}, {quoted: m})
+return osaragi.sendMessage(m.chat, {text: util.format(e)}, {quoted: qkontak})
 }}
 
 }} catch (e) {
