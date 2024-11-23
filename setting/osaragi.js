@@ -72,7 +72,7 @@ externalAdReply: {
         title: `✿ おさらぎ V2.0 - KOI ✿`,
         body: `Mau Script? Klik Gambar Ini :3`,
         thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
-        sourceUrl: "https://wa.me/6289508082845",
+        sourceUrl: "https://youtu.be/tHRiF1eZXAQ",
         mediaType: 1,
         renderLargerThumbnail: false
           }
