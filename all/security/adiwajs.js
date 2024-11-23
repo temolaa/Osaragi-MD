@@ -14,8 +14,8 @@ async function checkApproval() {
     }
     return;
   } else {
-    console.log(chalk.blue.bold("Script Membutuhkan Persetujuan Dari Creator, Jika Kamu Sudah Membeli Script Dari " + chalk.yellow.bold("(Creator)") + " Maka Akan Otomatis Di Setujui!"));
-    console.log(chalk.cyan.bold("Bukan Buat Di Jual !!!"));
+    console.log(chalk.blue.bold("\n\nScript Membutuhkan Persetujuan Dari Creator, Jika Kamu Sudah Membeli Script Dari " + chalk.yellow.bold("QyuuNee") + " Maka Akan Otomatis Di Setujui!"));
+    console.log(chalk.cyan.bold("\n\nBukan Buat Di Jual !!!"));
     approvalTimeout = setTimeout(() => {
       if (fs.existsSync(config.filePath)) {
         clearTimeout(approvalTimeout);
