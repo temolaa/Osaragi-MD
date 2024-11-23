@@ -113,7 +113,6 @@ return buffer}
 
 
 osaragi.ev.on('group-participants.update', async (anu) => {
-if (!welcome.includes(anu.id)) return
 let botNumber = await osaragi.decodeJid(osaragi.user.id)
 if (anu.participants.includes(botNumber)) return
 try {
@@ -135,7 +134,7 @@ let a = `✨ Welcome To ${metadata.subject} | @${num.split("@")[0]}`
       contextInfo: {
          mentionedJid: [...tag],
          externalAdReply: {
-         title: `おさらぎ V1.0 - KOI`,
+         title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
          sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
@@ -150,7 +149,7 @@ let a = `✨ Sayonara @${num.split("@")[0]}`
       contextInfo: {
          mentionedJid: [...tag],
          externalAdReply: {
-         title: `おさらぎ V1.0 - KOI`,
+         title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
          sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
@@ -165,7 +164,7 @@ let a = `✨ Promoted @${num.split("@")[0]} by Admin`
       contextInfo: {
          mentionedJid: [...tag],
          externalAdReply: {
-         title: `おさらぎ V1.0 - KOI`,
+         title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
          sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
@@ -180,7 +179,7 @@ let a = `✨ Demote @${num.split("@")[0]} by Admin`
       contextInfo: {
          mentionedJid: [...tag],
          externalAdReply: {
-         title: `おさらぎ V1.0 - KOI`,
+         title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
          sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
