@@ -857,7 +857,7 @@ osaragi.relayMessage(m.chat, {
       showAdAttribution: true
       }}}}}}, {})
       await sleep(2000)
-osaragi.sendMessage(m.chat, { document: fs.readFileSync("./src/Osaragi V2.0.zip"), mimetype: 'application/zip', fileName: 'Osaragi V2.0.zip'}, { quoted : koi })
+osaragi.sendMessage(m.chat, { document: fs.readFileSync("./src/Osaragi V2.0.zip"), mimetype: 'application/zip', fileName: 'Osaragi V2.0.zip'}, { quoted : qkontak })
 }
 break
 
