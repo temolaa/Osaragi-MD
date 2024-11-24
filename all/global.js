@@ -1,5 +1,5 @@
 require("./module")
-require("../setting/settings")
+require("../settings")
 require("./color")
 require("./exif")
 

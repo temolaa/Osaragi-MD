@@ -2,7 +2,7 @@
 // Recode FallZx
 
 // Osaragi V1.0
-// YT: QyuuNee
+// YT: osaragi
 
 require("./all/global")
 const func = require("./all/place")
@@ -10,11 +10,12 @@ const readline = require("readline")
 const chalk = require('chalk')
 const CFonts = require('cfonts')
 const welcome = JSON.parse(fs.readFileSync("./all/database/welcome.json"))
-const { getBuffer } = require('./all/myfunc')
+const { getBuffer, getSizeMedia } = require('./all/myfunc')
 const NodeCache = require("node-cache")
 const msgRetryCounterCache = new NodeCache()
 const yargs = require('yargs/yargs')
 const _ = require('lodash')
+const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./all/exif')
 const usePairingCode = true
 const question = (text) => {
 const rl = readline.createInterface({
@@ -27,8 +28,61 @@ CFonts.say(`OSARAGI`, {
    font: 'block',
   align: 'left',
   colors: ['cyan'],
-
 });
+
+/*
+var low
+try {
+  low = require('lowdb')
+} catch (e) {
+  low = require('./all/lowdb')
+}
+
+const { Low, JSONFile } = low
+const mongoDB = require('./all/mongoDB')
+
+global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
+const dbPath = './all/db.json';
+
+let db;
+if (urldb !== '') {
+db = new mongoDB(urldb);
+lolcatjs.fromString("[Berhasil tersambung ke database MongoDB]");
+} else {
+db = new JSONFile(dbPath);
+lolcatjs.fromString("[Berhasil tersambung ke database Lokal]");
+}
+
+global.db = new Low(db);
+global.DATABASE = global.db // Backwards Compatibility
+global.loadDatabase = async function loadDatabase() {
+  if (global.db.READ) return new Promise((resolve) => setInterval(function () { (!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null) }, 1 * 1000))
+  if (global.db.data !== null) return
+  global.db.READ = true
+  await global.db.read()
+  global.db.READ = false
+  global.db.data = {
+users: {},
+chats: {},
+game: {},
+database: {},
+settings: {},
+setting: {},
+others: {},
+sticker: {},
+    ...(global.db.data || {})
+  }
+  global.db.chain = _.chain(global.db.data)
+}
+loadDatabase()
+
+// save database every 30seconds
+if (global.db && urldb !== '') {
+setInterval(async () => {
+if (global.db.data) await global.db.write();
+}, 30 * 1000);
+}*/
+
 console.log(chalk.cyan(`Wait...`))
 return new Promise((resolve) => {
 rl.question(text, resolve)
@@ -95,7 +149,7 @@ if (!osaragi.public && m.key.remoteJid !== global.owner+"@s.whatsapp.net" && !m.
 if (m.isBaileys) return
 if (global.autoread) osaragi.readMessages([m.key])
 m = func.smsg(osaragi, m, store)
-require("./setting/osaragi.js")(osaragi, m, store)
+require("./osaragi.js")(osaragi, m, store)
 } catch (err) {
 console.log(err)
 }
@@ -191,6 +245,44 @@ let a = `✨ Demote @${num.split("@")[0]} by Admin`
 } catch (err) {
 console.log(err)
 }})
+
+osaragi.sendFile = async(jid, PATH, fileName, quoted = {}, options = {}) => {
+let types = await osaragi.getFile(PATH, true)
+let { filename, size, ext, mime, data } = types
+let type = '', mimetype = mime, pathFile = filename
+if (options.asDocument) type = 'document'
+if (options.asSticker || /webp/.test(mime)) {
+let { writeExif } = require('./lib/sticker.js')
+let media = { mimetype: mime, data }
+pathFile = await writeExif(media, { packname: global.packname, author: global.packname2, categories: options.categories ? options.categories : [] })
+await fs.promises.unlink(filename)
+type = 'sticker'
+mimetype = 'image/webp'}
+else if (/image/.test(mime)) type = 'image'
+else if (/video/.test(mime)) type = 'video'
+else if (/audio/.test(mime)) type = 'audio'
+else type = 'document'
+await osaragi.sendMessage(jid, { [type]: { url: pathFile }, mimetype, fileName, ...options }, { quoted, ...options })
+return fs.promises.unlink(pathFile)}
+
+osaragi.getFile = async (PATH, save) => {
+let res
+let data = Buffer.isBuffer(PATH) ? PATH : /^data:.*?\/.*?;base64,/i.test(PATH) ? Buffer.from(PATH.split`,`[1], 'base64') : /^https?:\/\//.test(PATH) ? await (res = await getBuffer(PATH)) : fs.existsSync(PATH) ? (filename = PATH, fs.readFileSync(PATH)) : typeof PATH === 'string' ? PATH : Buffer.alloc(0)
+//if (!Buffer.isBuffer(data)) throw new TypeError('Result is not a buffer')
+let type = await FileType.fromBuffer(data) || {
+mime: 'application/octet-stream',
+ext: '.bin'
+}
+filename = path.join(__filename, '../media/' + new Date * 1 + '.' + type.ext)
+if (data && save) fs.promises.writeFile(filename, data)
+return {
+res,
+filename,
+	size: await getSizeMedia(data),
+...type,
+data
+}
+}
 
 osaragi.ev.on('connection.update', async (update) => {
 const { connection, lastDisconnect } = update
