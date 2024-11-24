@@ -273,7 +273,7 @@ let type = await FileType.fromBuffer(data) || {
 mime: 'application/octet-stream',
 ext: '.bin'
 }
-filename = path.join(__filename, '../media/' + new Date * 1 + '.' + type.ext)
+filename = path.join(__filename, './media/' + new Date * 1 + '.' + type.ext)
 if (data && save) fs.promises.writeFile(filename, data)
 return {
 res,

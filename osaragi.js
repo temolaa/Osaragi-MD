@@ -116,37 +116,16 @@ let participant_sender = m.isGroup ? groupMetadata?.participants.find((v) => v.i
 const isBotAdmin = participant_bot?.admin !== null ? true : false
 const isAdmin = participant_sender?.admin !== null ? true : false
 const isCreator = (m && m?.sender && [botNumber, ...newowner,...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m?.sender)) || false;
-const { smsg, tanggal, getTime, formatp, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins, generateProfilePicture } = require('../all/myfunc.js')
-const { ssweb, igstalk, tts, mediafire, ytmp3 } = require("../scrape/screaper.js")
-const { quote } = require('../all/quote.js')
-const { remini } = require('../scrape/remini.js')
-const yts = require('../scrape/yt-search')
+const { smsg, tanggal, getTime, formatp, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins, generateProfilePicture } = require('./all/myfunc.js')
+const { ssweb, igstalk, tts, mediafire, ytmp3 } = require("./scrape/screaper.js")
+const { quote } = require('./all/quote.js')
+const { remini } = require('./scrape/remini.js')
+const yts = require('./scrape/yt-search')
 const { exec, spawn, execSync } = require("child_process")
 const b = fs.readFileSync("./media/menu.mp3")
 //const isPremium = premium.includes(m.sender)*/
-const { checkApproval, approveScript, isApproved, validateApprovalData, checkScriptIntegrity } = require('../all/security/adiwajs')
-const config = require('../all/security/adiwConfig')
-const reply = (teks) => {
-osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
-            mentionedJid: [],
-            groupMentions: [],
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: '120363201331652484@newsletter',
-               newsletterName: "🕊️ Giveaway (^^)/~~~",
-                serverMessageId: -1
-            },
-            forwardingScore: 256,
-externalAdReply: {
-        showAdAttribution: true,
-        title: `✿ おさらぎ V2.0 - KOI ✿`,
-        body: `Mau Script? Klik Gambar Ini :3`,
-        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
-        sourceUrl: "https://wa.me/6289508082845",
-        mediaType: 1,
-        renderLargerThumbnail: false
-          }
-        }}, { quoted: qkontak })}
+const { checkApproval, approveScript, isApproved, validateApprovalData, checkScriptIntegrity } = require('./all/security/adiwajs')
+const config = require('./all/security/adiwConfig')
 async function main() {
     if (!(await isApproved())) {
         if (m.sender.includes(config.approval.num) && budy.includes(config.approval.text)) {
@@ -453,7 +432,7 @@ contextInfo: {
         title: `Selamat menunaikan Ibadah Sholat ${sholat}`,
         body: `🕑 ${waktu}`,
         sourceUrl: '',
-        thumbnail: await fs.readFileSync('../media/jadwal.jpg'),
+        thumbnail: await fs.readFileSync('./media/jadwal.jpg'),
         renderLargerThumbnail: true
     }
 }
@@ -492,6 +471,28 @@ sendEphemeral: true
 const qpayment = {
 key: {remoteJid: '0@s.whatsapp.net', fromMe: false, id: `ownername`, participant: '0@s.whatsapp.net'}, message: {requestPaymentMessage: {currencyCodeIso4217: "IDR", amount1000: 999999999, requestFrom: '0@s.whatsapp.net', noteMessage: { extendedTextMessage: { text: "Osaragi"}}, expiryTimestamp: 999999999, amount: {value: 91929291929, offset: 1000, currencyCode: "INR"}}}}
 
+const reply = (teks) => {
+osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
+            mentionedJid: [],
+            groupMentions: [],
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: '120363201331652484@newsletter',
+               newsletterName: "🕊️ Giveaway (^^)/~~~",
+                serverMessageId: -1
+            },
+            forwardingScore: 256,
+externalAdReply: {
+        showAdAttribution: true,
+        title: `✿ おさらぎ V2.0 - KOI ✿`,
+        body: `Mau Script? Klik Gambar Ini :3`,
+        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
+        sourceUrl: "https://youtu.be/tHRiF1eZXAQ",
+        mediaType: 1,
+        renderLargerThumbnail: false
+          }
+        }}, { quoted: qkontak })}
+        
 //========== FUNCTION ===========//
 var ppuser
 try {
@@ -856,8 +857,6 @@ osaragi.relayMessage(m.chat, {
       externalAdReply: {
       showAdAttribution: true
       }}}}}}, {})
-      await sleep(2000)
-osaragi.sendMessage(m.chat, { document: fs.readFileSync("./src/Osaragi V2.0.zip"), mimetype: 'application/zip', fileName: 'Osaragi V2.0.zip'}, { quoted : qkontak })
 }
 break
 
@@ -1510,7 +1509,7 @@ case 'hdvid': {
   const mime = (q.msg || q).mimetype || '';
   if (!mime) return m.reply(`Vidionya mana?`);
   m.reply("wait.. agak lama cuy");
-  let { TelegraPh } = require('../all/uploader.js')
+  let { TelegraPh } = require('./all/uploader.js')
   const media = await quoted.download()
   /*const url = await TelegraPh(media);*/
   const output = 'output.mp4'; 
@@ -1915,7 +1914,7 @@ break
 case 'tourl': {
 if (!/video/.test(mime) && !/image/.test(mime)) reply(`*Send/Reply the Video/Image With Caption* ${prefix + command}`)
 if (!quoted) reply(`*Send/Reply the Video/Image Caption* ${prefix + command}`)
-let { TelegraPh } = require('../all/uploader.js')
+let { TelegraPh } = require('./all/uploader.js')
 let media = await osaragi.downloadAndSaveMediaMessage(quoted)
 let anu = await TelegraPh(media)
 reply(util.format(anu))
@@ -1943,7 +1942,7 @@ break
 case 'tomp4': case 'tovideo': {
 if (!quoted) reply `Balas sticker video Dengan Caption ${prefix + command}`
 if (/video/.test(mime)) {
-let { TelegraPh } = require('../all/uploader')
+let { TelegraPh } = require('./all/uploader')
 let media = await osaragi.downloadAndSaveMediaMessage(quoted)
 let ehe = await TelegraPh(media)
 await osaragi.sendMessage(from, { video: { url: util.format(ehe), caption: 'Convert Webp To Video' } }, {quoted: qkontak})
@@ -1955,7 +1954,7 @@ case 'tomp3': {
 if (!/video/.test(mime) && !/audio/.test(mime)) reply `Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`
 if (!quoted) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 let media = await osaragi.downloadMediaMessage(quoted)
-let { toAudio } = require('../all/converter.js')
+let { toAudio } = require('./all/converter.js')
 let audio = await toAudio(media, 'mp4')
 osaragi.sendMessage(m.chat, {document: audio, mimetype: 'audio/mpeg', fileName: `Convert By ${osaragi.user.name}.mp3`}, { quoted : m })
 }
@@ -1965,7 +1964,7 @@ case 'toaudio': case 'audio': {
 if (!/video/.test(mime) && !/audio/.test(mime)) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 if (!quoted) reply `*Send/Reply the Video/Audio You Want to Use as Audio With Caption* ${prefix + command}`
 let media = await osaragi.downloadMediaMessage(quoted)
-let { toAudio } = require('../all/converter.js')
+let { toAudio } = require('./all/converter.js')
 let audio = await toAudio(media, 'mp4')
 osaragi.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
 }
@@ -1976,7 +1975,7 @@ if (!/video/.test(mime) && !/audio/.test(mime)) reply `*Reply Video/Audio That Y
 if (!quoted) reply `*Reply Video/Audio That You Want To Be VN With Caption* ${prefix + command}`
 reply('*Sabar Cuy Loading*')
 let media = await quoted.download()
-let { toPTT } = require('../all/converter.js')
+let { toPTT } = require('./all/converter.js')
 let audio = await toPTT(media, 'mp4')
 osaragi.sendMessage(from, {audio: audio, mimetype:'audio/mpeg', ptt:true})
 }

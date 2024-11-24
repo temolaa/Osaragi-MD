@@ -1,5 +1,9 @@
 // BASE RUZTANXD 
 
+const fs = require('fs')
+const chalk = require('chalk')
+const moment = require('moment-timezone')
+
 //========== Setting Owner ==========//
 global.owner = "6289508082845"
 global.idsaluran = "120363201331652484@newsletter"
