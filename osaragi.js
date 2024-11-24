@@ -126,6 +126,41 @@ const b = fs.readFileSync("./media/menu.mp3")
 //const isPremium = premium.includes(m.sender)*/
 const { checkApproval, approveScript, isApproved, validateApprovalData, checkScriptIntegrity } = require('./all/security/adiwajs')
 const config = require('./all/security/adiwConfig')
+const qkontak = {
+key: {
+participant: `0@s.whatsapp.net`,
+...(botNumber ? {
+remoteJid: `status@broadcast`
+} : {})
+},
+message: {
+'contactMessage': {
+'displayName': `${namaowner}`,
+'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;ttname,;;;\nFN:ttname\nitem1.TEL;waid=6289508082845:+62 895-0808-2845\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
+sendEphemeral: true
+}}
+}
+const reply = (teks) => {
+osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
+            mentionedJid: [],
+            groupMentions: [],
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: '120363201331652484@newsletter',
+               newsletterName: "🕊️ Giveaway (^^)/~~~",
+                serverMessageId: -1
+            },
+            forwardingScore: 256,
+externalAdReply: {
+        showAdAttribution: true,
+        title: `✿ おさらぎ V2.0 - KOI ✿`,
+        body: `Mau Script? Klik Gambar Ini :3`,
+        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
+        sourceUrl: "https://youtu.be/tHRiF1eZXAQ",
+        mediaType: 1,
+        renderLargerThumbnail: false
+          }
+        }}, { quoted: qkontak })}
 async function main() {
     if (!(await isApproved())) {
         if (m.sender.includes(config.approval.num) && budy.includes(config.approval.text)) {
@@ -454,44 +489,8 @@ const qlive = {key: {participant: '0@s.whatsapp.net', ...(m.chat ? {remoteJid: `
 
 const qaudio = {key: {participant: '0@s.whatsapp.net', ...(m.chat ? {remoteJid: `status@broadcast`} : {})}, message: {audioMessage: {seconds: 900030, ptt: true }}}
 
-const qkontak = {
-key: {
-participant: `0@s.whatsapp.net`,
-...(botNumber ? {
-remoteJid: `status@broadcast`
-} : {})
-},
-message: {
-'contactMessage': {
-'displayName': `${namaowner}`,
-'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;ttname,;;;\nFN:ttname\nitem1.TEL;waid=6289508082845:+62 895-0808-2845\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
-sendEphemeral: true
-}}
-}
 const qpayment = {
 key: {remoteJid: '0@s.whatsapp.net', fromMe: false, id: `ownername`, participant: '0@s.whatsapp.net'}, message: {requestPaymentMessage: {currencyCodeIso4217: "IDR", amount1000: 999999999, requestFrom: '0@s.whatsapp.net', noteMessage: { extendedTextMessage: { text: "Osaragi"}}, expiryTimestamp: 999999999, amount: {value: 91929291929, offset: 1000, currencyCode: "INR"}}}}
-
-const reply = (teks) => {
-osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
-            mentionedJid: [],
-            groupMentions: [],
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: '120363201331652484@newsletter',
-               newsletterName: "🕊️ Giveaway (^^)/~~~",
-                serverMessageId: -1
-            },
-            forwardingScore: 256,
-externalAdReply: {
-        showAdAttribution: true,
-        title: `✿ おさらぎ V2.0 - KOI ✿`,
-        body: `Mau Script? Klik Gambar Ini :3`,
-        thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
-        sourceUrl: "https://youtu.be/tHRiF1eZXAQ",
-        mediaType: 1,
-        renderLargerThumbnail: false
-          }
-        }}, { quoted: qkontak })}
         
 //========== FUNCTION ===========//
 var ppuser
