@@ -118,11 +118,13 @@ async function writeExif (media, metadata) {
     }
 }
 
-global.imageToWebp = imageToWebp
-global.videoToWebp = videoToWebp
-global.writeExifImg = writeExifImg
-global.writeExifVid = writeExifVid
-global.writeExif = writeExif
+module.exports = {
+    imageToWebp,
+    videoToWebp,
+    writeExifImg,
+    writeExifVid,
+    writeExif
+}
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
