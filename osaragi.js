@@ -116,6 +116,7 @@ let participant_sender = m.isGroup ? groupMetadata?.participants.find((v) => v.i
 const isBotAdmin = participant_bot?.admin !== null ? true : false
 const isAdmin = participant_sender?.admin !== null ? true : false
 const isCreator = (m && m?.sender && [botNumber, ...newowner,...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m?.sender)) || false;
+const isPremium = isCreator || global.premium.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender) || false
 const { smsg, tanggal, getTime, formatp, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom, getGroupAdmins, generateProfilePicture } = require('./all/myfunc.js')
 const { ssweb, igstalk, tts, mediafire, ytmp3 } = require("./scrape/screaper.js")
 const { quote } = require('./all/quote.js')
@@ -670,6 +671,7 @@ let menu = `
 ┃- morphic
 ┃- aio2
 ┃- gpt4
+┃- kivotos ( ai image )
 ┃- autoai ( Character-AI )
 ┃- osaragi ( Reset AutoAi )
 ┗──≫
@@ -2038,8 +2040,8 @@ let url = resst.all;
 let result = url[Math.floor(Math.random() * url.length)];
 let ress = await fetch(`https://api.neekoi.me/api/youtube-audio?url=${result.url}`);
 let res = await ress.json();
-        await osaragi.sendMessage(from, { audio: {url: res.data.audio},
-            mimetype: 'audio/mp4',
+        await osaragi.sendMessage(from, { audio: { url: `${res.data.audio}` },
+            mimetype: 'audio/mpeg',
             contextInfo: {
                 mentionedJid: [
                     m.sender
@@ -2067,8 +2069,8 @@ case 'ytmp3': {
     try {
         let ress = await fetch(`https://api.neekoi.me/api/youtube-audio?url=${args[0]}`);
         let res = await ress.json();
-        await osaragi.sendMessage(from, { audio: {url: res.data.audio},
-            mimetype: 'audio/mp4',
+        await osaragi.sendMessage(from, { audio: { url: `${res.data.audio}` },
+            mimetype: 'audio/mpeg',
             contextInfo: {
                 mentionedJid: [
                     m.sender
@@ -2099,8 +2101,9 @@ case 'ytmp4': {
     if (!text) return m.reply("Linknya?");
     await osaragi.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}})
     try {
-        let res = await axios.get(`https://api.neekoi.me/api/youtube-video?url=${args[0]}`);
-        await osaragi.sendMessage(from, { video: {url: res.data.video},
+        let ress = await fetch(`https://api.neekoi.me/api/youtube-video?url=${args[0]}`);
+	let res = await ress.json();
+        await osaragi.sendMessage(from, { video: {url: `${res.data.video}` },
             mimetype: 'video/mp4',
             fileName: res.data.title
         }, { quoted: qkontak });
@@ -2619,6 +2622,19 @@ let jsonData = JSON.stringify({ [m.quoted.mtype]: m.quoted }, null, 2)
 reply(jsonData)
 }
 break
+
+case 'kivotos': {
+  if (!isPremium) return m.reply("Fitur Khusus Premium !!!")
+  if (!text) return reply('Contoh: .kivotos hutao genshin impact, modern')
+  await osaragi.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}})
+  try {
+  await osaragi.sendMessage(m.chat, { image : { url : `https://love.neekoi.me/kivotos?text=${full_args}` }, caption: `𝗣𝗿𝗼𝗺𝗽𝘁𝘀:\n${full_args}` }, { quoted: m })
+  } catch (err) {
+  reply(err)
+  }
+  await osaragi.sendMessage(m.chat, { react: { text: "✅",key: m.key,}})
+  }
+  break
 
 case 'osaragi': {
 const g = "https://cih-cai-jir.koi.pics/newchat?id=_XjlY1xn-xKyZ453zDa2boJ51fMfO3oV6qyTvds9BSM";
