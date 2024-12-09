@@ -153,7 +153,7 @@ osaragi.sendMessage(m.chat, { text: teks, contextInfo: {
             forwardingScore: 256,
 externalAdReply: {
         showAdAttribution: true,
-        title: `✿ おさらぎ V2.0 - KOI ✿`,
+        title: `✿ おさらぎ V3.0 - KOI ✿`,
         body: `Mau Script? Klik Gambar Ini :3`,
         thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
         sourceUrl: "https://youtu.be/GNhR3A2ASb8",
@@ -838,7 +838,7 @@ m.reply(`Berhasil mengubah autoread ke ${q}`)
             case 'sc':
             case 'script': {
             await sleep(1000)
-let buy = `▧ 「 *S C R I P T - O S A R A G I V2.0* 」
+let buy = `▧ 「 *S C R I P T - O S A R A G I V3.0* 」
 │
 │ ∘  *Wait...*
 │
