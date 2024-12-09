@@ -1,7 +1,7 @@
 // BASE CREATE BY Ruztan
 // Recode FallZx
 
-// Osaragi V1.0
+// Osaragi V3.0
 // YT: QyuuNee
 
 require("./settings")
@@ -2022,8 +2022,9 @@ break
 case 'igdl': case 'ig': case 'igvideo': case 'igimage': case 'igvid': case 'igimg': {
 	  if (!text) return reply(`You need to give the URL of Any Instagram video, post, reel, image`)
   try {
-    let res = await axios.get(`https://api.neekoi.me/api/igdl?url=${args[0]}`);
-    await osaragi.sendFile(m.chat, `${res.result.data[0].url}`, 'file', m)
+    let ress = await fetch(`https://api.neekoi.me/api/igdl?url=${args[0]}`);
+    let res = await ress.json();
+    await osaragi.sendMessage(from, {video: {url: res.result.data[0].url}})
   } catch (error) {
     return reply(`An error occurred: ${error.message}`)
   }
@@ -2032,13 +2033,13 @@ break
 
 case 'play': {
 if (!text) return reply(`Example: ${prefix + command} bad - wave to earth`)
-let ress = await yts(text)
-let url = ress.all;
+let resst = await yts(text)
+let url = resst.all;
 let result = url[Math.floor(Math.random() * url.length)];
-let res = await axios.get(`https://api.neekoi.me/api/youtube-audio?url=${result.url}`);
-        await osaragi.sendMessage(from, { audio: { url: res.data.audio },
+let ress = await fetch(`https://api.neekoi.me/api/youtube-audio?url=${result.url}`);
+let res = await ress.json();
+        await osaragi.sendMessage(from, { audio: {url: res.data.audio},
             mimetype: 'audio/mp4',
-            fileName: res.data.title,
             contextInfo: {
                 mentionedJid: [
                     m.sender
@@ -2064,10 +2065,10 @@ case 'ytmp3': {
     if (!text) return m.reply("Linknya?");
     await osaragi.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}})
     try {
-        let res = await axios.get(`https://api.neekoi.me/api/youtube-audio?url=${args[0]}`);
+        let ress = await fetch(`https://api.neekoi.me/api/youtube-audio?url=${args[0]}`);
+        let res = await ress.json();
         await osaragi.sendMessage(from, { audio: {url: res.data.audio},
             mimetype: 'audio/mp4',
-            fileName: res.data.title,
             contextInfo: {
                 mentionedJid: [
                     m.sender

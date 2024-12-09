@@ -1,7 +1,7 @@
 // BASE CREATE BY Ruztan
 // Recode FallZx
 
-// Osaragi V1.0
+// Osaragi V3.0
 // YT: osaragi
 
 require("./all/global")
@@ -191,7 +191,7 @@ let a = `✨ Welcome To ${metadata.subject} | @${num.split("@")[0]}`
          title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
-         sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
+         sourceUrl: "https://chat.whatsapp.com/Lp8ph3jwIoBKmJevsZEmhC",
          mediaType: 1,
          renderLargerThumbnail: false
     }}})
@@ -206,7 +206,7 @@ let a = `✨ Sayonara @${num.split("@")[0]}`
          title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
-         sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
+         sourceUrl: "https://chat.whatsapp.com/Lp8ph3jwIoBKmJevsZEmhC",
          mediaType: 1,
          renderLargerThumbnail: false
     }}})
@@ -221,7 +221,7 @@ let a = `✨ Promoted @${num.split("@")[0]} by Admin`
          title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
-         sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
+         sourceUrl: "https://chat.whatsapp.com/Lp8ph3jwIoBKmJevsZEmhC",
          mediaType: 1,
          renderLargerThumbnail: false
     }}})
@@ -236,7 +236,7 @@ let a = `✨ Demote @${num.split("@")[0]} by Admin`
          title: `おさらぎ V2.0 - KOI`,
          body: ``,
          thumbnailUrl: ppuser,
-         sourceUrl: "https://chat.whatsapp.com/GIdysPCksprBmGXtTHNS3i",
+         sourceUrl: "https://chat.whatsapp.com/Lp8ph3jwIoBKmJevsZEmhC",
          mediaType: 1,
          renderLargerThumbnail: false
     }}})
