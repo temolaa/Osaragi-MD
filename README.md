@@ -6,7 +6,7 @@
 <p align="center">
 	<a href="https://saweria.co/neekoi"><img width="185" src="media/badge.svg" alt="Badge"></a>
 	<br><br>
-	<b>🙌 Use <a href="https://saweria.co/neekoi">donations</a> to help support <b>your</b> projects! 🙌</b>
+	<b>🙌 Use <a href="https://saweria.co/neekoi">donations</a> to help support <b>my</b> projects! 🙌</b>
 </p>
 <br>
 
