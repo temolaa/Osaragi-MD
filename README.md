@@ -24,7 +24,13 @@
 - Tools
 - Group Security
 - Searching
+- CPanel
 - **NO ENC 100%**
+
+## WAJIB DIBACA SEBELUM INSTALL
+- Pergi ke folder [all/security/adiwConfig.js](https://github.com/OxBrutal/Osaragi-V2.0/blob/main/all/security/adiwConfig.js)
+- Ubah 'num' pake nomor owner kamu
+- Approve gunakan kata **( oke )**
 
 ## HEROKU BUILDPACK
 
