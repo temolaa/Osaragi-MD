@@ -18,13 +18,12 @@
 
 <br>
 
-## Osaragi V2.0 ✨
+## Osaragi V3.0 ✨
 - AI
 - Downloader
 - Tools
 - Group Security
 - Searching
-- CPanel
 - **NO ENC 100%**
 
 ## WAJIB DIBACA SEBELUM INSTALL
