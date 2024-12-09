@@ -156,7 +156,7 @@ externalAdReply: {
         title: `✿ おさらぎ V2.0 - KOI ✿`,
         body: `Mau Script? Klik Gambar Ini :3`,
         thumbnailUrl: `https://files.catbox.moe/sri4cd.jpg`,
-        sourceUrl: "https://youtu.be/tHRiF1eZXAQ",
+        sourceUrl: "https://youtu.be/GNhR3A2ASb8",
         mediaType: 1,
         renderLargerThumbnail: false
           }
