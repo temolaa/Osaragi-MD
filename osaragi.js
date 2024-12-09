@@ -124,7 +124,6 @@ const { remini } = require('./scrape/remini.js')
 const yts = require('./scrape/yt-search')
 const { exec, spawn, execSync } = require("child_process")
 const b = fs.readFileSync("./media/menu.mp3")
-//const isPremium = premium.includes(m.sender)*/
 const { checkApproval, approveScript, isApproved, validateApprovalData, checkScriptIntegrity } = require('./all/security/adiwajs')
 const config = require('./all/security/adiwConfig')
 const qkontak = {
@@ -2627,6 +2626,7 @@ case 'kivotos': {
   if (!isPremium) return m.reply("Fitur Khusus Premium !!!")
   if (!text) return reply('Contoh: .kivotos hutao genshin impact, modern')
   await osaragi.sendMessage(m.chat, { react: { text: "⏱️",key: m.key,}})
+  m.reply("Tunggu 30 detik...")
   try {
   await osaragi.sendMessage(m.chat, { image : { url : `https://love.neekoi.me/kivotos?text=${full_args}` }, caption: `𝗣𝗿𝗼𝗺𝗽𝘁𝘀:\n${full_args}` }, { quoted: m })
   } catch (err) {
